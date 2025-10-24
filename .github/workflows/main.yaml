@@ -1,4 +1,4 @@
-name: "SAST Scan and Build/Push SuperMario Docker Image"
+name: "SAST Scan, Build/Push SuperMario Docker Image, and Update K8s Deployment"
 
 on:
     push:
@@ -27,6 +27,9 @@ jobs:
         runs-on: ubuntu-latest
         needs: sonarqube_sast_scan # Run only after successful SAST scan
 
+        outputs:
+            image_tag: ${{ steps.set_output.outputs.image_tag }}
+
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v3
@@ -35,6 +38,7 @@ jobs:
               run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
             - name: Build and Push Docker Image
+              id: set_output
               run: |
                   IMAGE_NAME=kavinduorg/supermariogitopsproject
                   GIT_SHA=${{ github.sha }}
@@ -45,3 +49,33 @@ jobs:
                   # Push both tags
                   docker push $IMAGE_NAME:$GIT_SHA
                   docker push $IMAGE_NAME:latest
+
+                  # Export Git SHA as output for next job
+                  echo "image_tag=$GIT_SHA" >> $GITHUB_OUTPUT
+
+    update_k8s_yaml_version_file_with_latest_image_tag:
+        name: Update K8s Deployment YAML with Latest Image Tag
+        runs-on: ubuntu-latest
+        needs: build_push_supermario_docker_image
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+
+            - name: Set Git Config
+              run: |
+                  git config --global user.email "${{ secrets.GIT_EMAIL }}"
+                  git config --global user.name "${{ secrets.GIT_USERNAME }}"
+
+            - name: Update Deployment YAML
+              env:
+                  VERSION: ${{ needs.build_push_supermario_docker_image.outputs.image_tag }}
+              run: |
+                  git pull
+                  # Update image tag in deployment.yaml
+                  sed -i "s|image: kavinduorg/supermariogitopsproject:.*$|image: kavinduorg/supermariogitopsproject:${VERSION}|" deployment.yaml
+
+
+
+                  git commit -m "Updated deployment.yaml  with SuperMario image tag ${VERSION}"
+                  git push
