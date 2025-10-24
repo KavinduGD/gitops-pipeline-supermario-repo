@@ -18,5 +18,5 @@ jobs:
 
             - name: Build and Push Docker Image
               run: |
-                  docker build -t kavinduorg/supermariogitopsproject:1 .
-                  docker push kavinduorg/supermariogitopsproject:1
+                  docker build -t kavinduorg/supermariogitopsproject:${{ github.sha }} .
+                  docker push kavinduorg/supermariogitopsproject:${{ github.sha }}
