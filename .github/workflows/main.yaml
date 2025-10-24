@@ -74,8 +74,6 @@ jobs:
                   git pull
                   # Update image tag in deployment.yaml
                   sed -i "s|image: kavinduorg/supermariogitopsproject:.*$|image: kavinduorg/supermariogitopsproject:${VERSION}|" deployment.yaml
-
-
-
+                  git add deployment.yaml
                   git commit -m "Updated deployment.yaml  with SuperMario image tag ${VERSION}"
                   git push
