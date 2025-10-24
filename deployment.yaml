@@ -13,7 +13,7 @@ spec:
         app: supermariogame
     spec:
       containers:
-        - image: kavinduorg/supermariogitopsproject:tag
+        - image: kavinduorg/supermariogitopsproject:3356f8050dfaf6dfa387647a2df9b3f43f5a2955
           name: supermariogame-container
           ports:
             - containerPort: 8080
