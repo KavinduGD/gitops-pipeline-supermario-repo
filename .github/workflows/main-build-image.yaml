@@ -1,4 +1,4 @@
-name: "Build and push Super Mario Docker image with static tag to Docker Hub"
+name: "Build and push Super Mario Docker image with static and latest tags to Docker Hub"
 
 on:
     push:
@@ -18,5 +18,12 @@ jobs:
 
             - name: Build and Push Docker Image
               run: |
-                  docker build -t kavinduorg/supermariogitopsproject:${{ github.sha }} .
-                  docker push kavinduorg/supermariogitopsproject:${{ github.sha }}
+                  IMAGE_NAME=kavinduorg/supermariogitopsproject
+                  GIT_SHA=${{ github.sha }}
+
+                  # Build image with both tags
+                  docker build -t $IMAGE_NAME:$GIT_SHA -t $IMAGE_NAME:latest .
+
+                  # Push both tags
+                  docker push $IMAGE_NAME:$GIT_SHA
+                  docker push $IMAGE_NAME:latest
