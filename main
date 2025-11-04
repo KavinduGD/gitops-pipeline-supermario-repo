@@ -1,0 +1,3 @@
+kustomize:
+  images:
+  - kavinduorg/supermariogitopsproject:70901c0ab775144f1815261953e83d6d1bbea377
