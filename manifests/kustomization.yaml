@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - deployment.yaml
+
+images:
+  - name: kavinduorg/supermariogitopsproject
+    newTag: 3356f8050dfaf6dfa387647a2df9b3f43f5a2955
