@@ -43,15 +43,15 @@ jobs:
           IMAGE_NAME=kavinduorg/supermariogitopsproject
           GIT_SHA=${{ github.sha }}
 
-          # # Build image with both tags
-          # docker build -t $IMAGE_NAME:$GIT_SHA -t $IMAGE_NAME:latest .
+          # Build image with both tags
+          docker build -t $IMAGE_NAME:$GIT_SHA -t $IMAGE_NAME:latest .
 
-          # # Push both tags
-          # docker push $IMAGE_NAME:$GIT_SHA
-          # docker push $IMAGE_NAME:latest
+          # Push both tags
+          docker push $IMAGE_NAME:$GIT_SHA
+          docker push $IMAGE_NAME:latest
 
-          # # Export Git SHA as output for next job
-          # echo "image_tag=$GIT_SHA" >> $GITHUB_OUTPUT
+          # Export Git SHA as output for next job
+          echo "image_tag=$GIT_SHA" >> $GITHUB_OUTPUT
 
   # update_k8s_yaml_version_file_with_latest_image_tag:
   #   name: Update K8s Deployment YAML with Latest Image Tag
