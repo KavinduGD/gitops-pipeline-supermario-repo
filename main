@@ -1,3 +1,3 @@
 kustomize:
   images:
-  - kavinduorg/supermariogitopsproject:2c2628b36b70319dec56c99060379f5565ecfded
+  - kavinduorg/supermariogitopsproject:d06d61d7ae07d94d6c9ebe1a0dc517cc43a49b77
